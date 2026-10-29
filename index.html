@@ -2,28 +2,28 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Juz Amma Challenge</title>
-<meta name="theme-color" content="#1f5bff"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#e8467f"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Juz Amma">
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Caveat:wght@600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;font-family:Inter,system-ui,sans-serif;color:#111;background:#dfe6f3}
+html,body{margin:0;height:100%;font-family:Inter,system-ui,sans-serif;color:#111;background:#f6e3ec}
 #app{max-width:430px;margin:0 auto;min-height:100%;position:relative;overflow:hidden}
 .screen{display:none;min-height:100vh;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 22px) 20px calc(env(safe-area-inset-bottom) + 24px);flex-direction:column}
 .screen.on{display:flex}
-.blue{background:radial-gradient(120% 80% at 20% 0%,#4f8bff 0%,#1f5bff 45%,#0a2fc9 100%);color:#fff}
-.pastel{background:radial-gradient(60% 40% at 15% 10%,#dbe8ff 0%,transparent 70%),radial-gradient(50% 35% at 90% 30%,#ffe1ec 0%,transparent 70%),radial-gradient(60% 40% at 30% 95%,#ffe6d2 0%,transparent 70%),#fbfcff}
+.blue{background:radial-gradient(120% 80% at 20% 0%,#ff8fbf 0%,#e8467f 45%,#c2185b 100%);color:#fff}
+.pastel{background:radial-gradient(60% 40% at 15% 10%,#ffd9ea 0%,transparent 70%),radial-gradient(50% 35% at 90% 30%,#ffe1ec 0%,transparent 70%),radial-gradient(60% 40% at 30% 95%,#ffe6d2 0%,transparent 70%),#fbfcff}
 .hand{font-family:Caveat,cursive}
 .ar{font-family:"Amiri Quran",Amiri,serif;direction:rtl;line-height:2.1}
 h1.big{font-weight:900;font-size:46px;line-height:.95;letter-spacing:-1px;margin:40px 0 14px}
 .intro p{font-size:20px;font-weight:600;margin:6px 0}
 .intro .rule{font-size:22px;font-weight:800;margin:8px 0}
-.intro .rule b{display:inline-block;background:#fff;color:#1f5bff;border-radius:8px;padding:0 8px;margin-right:8px}
+.intro .rule b{display:inline-block;background:#fff;color:#e8467f;border-radius:8px;padding:0 8px;margin-right:8px}
 .intro .hand{font-size:32px;margin-top:22px;opacity:.95}
 .btn{border:0;border-radius:999px;padding:16px 22px;font:800 18px Inter,sans-serif;cursor:pointer}
-.btn.w{background:#fff;color:#1f5bff;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.btn.w{background:#fff;color:#e8467f;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .btn.g{background:rgba(255,255,255,.16);color:#fff;border:1.5px solid rgba(255,255,255,.5)}
 .btn.d{background:#111;color:#fff}
 .stack{display:flex;flex-direction:column;gap:12px;margin-top:auto}
@@ -46,7 +46,7 @@ h1.big{font-weight:900;font-size:46px;line-height:.95;letter-spacing:-1px;margin
 .mid{display:flex;gap:10px;align-items:center;margin:16px 0}
 .qpill{flex:1;background:#fff;border-radius:999px;padding:13px 18px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(30,40,80,.08)}
 .plus{width:48px;height:48px;border-radius:14px;background:#e7e9ef;color:#8b90a0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;border:0;flex:none}
-.plus.on{background:#1f5bff;color:#fff}.plus.tap{cursor:pointer;outline:2px dashed #1f5bff55;outline-offset:2px}
+.plus.on{background:#e8467f;color:#fff}.plus.tap{cursor:pointer;outline:2px dashed #e8467f55;outline-offset:2px}
 .ans{border:2px dashed #c9cdd8;box-shadow:none;background:rgba(255,255,255,.75);min-height:170px}
 .ans.rev{border-style:solid;border-color:var(--a);background:#fff}
 .q{font-size:84px;color:#c4c8d2;font-weight:900;text-align:center;margin:6px 0}
@@ -62,20 +62,29 @@ h1.big{font-weight:900;font-size:46px;line-height:.95;letter-spacing:-1px;margin
 /* setup/study */
 .list{display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 14px;box-shadow:0 4px 14px rgba(30,40,80,.06);cursor:pointer}
-.item .n{width:34px;height:34px;border-radius:10px;background:#eef2ff;color:#1f5bff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.item .n{width:34px;height:34px;border-radius:10px;background:#ffeef5;color:#e8467f;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
 .item .nm{flex:1;min-width:0}.item .nm b{display:block}.item .nm span{font-size:12.5px;color:#666}
 .item .ar{font-size:22px;line-height:1.4}
-.seg{display:flex;gap:6px}.seg button{flex:1;border:0;border-radius:12px;padding:10px;font-weight:800;background:#fff}.seg button.on{background:#1f5bff;color:#fff}
-.back{background:none;border:0;font-weight:800;font-size:16px;color:#1f5bff;padding:0;cursor:pointer}
+.seg{display:flex;gap:6px}.seg button{flex:1;border:0;border-radius:12px;padding:10px;font-weight:800;background:#fff}.seg button.on{background:#e8467f;color:#fff}
+.back{background:none;border:0;font-weight:800;font-size:16px;color:#e8467f;padding:0;cursor:pointer}
 .sv{background:#fff;border-radius:18px;padding:12px 14px;margin-bottom:10px;box-shadow:0 4px 14px rgba(30,40,80,.06)}
 .sv .verse{font-size:26px;margin:4px 0}
-.sv.playing{outline:2px solid #1f5bff}
+.sv.playing{outline:2px solid #e8467f}
 .hidetxt .sv:not(.shown) .verse,.hidetxt .sv:not(.shown) .help{filter:blur(9px);user-select:none}
-.ic{border:0;background:#eef2ff;color:#1f5bff;border-radius:999px;width:36px;height:36px;font-size:15px;cursor:pointer}
+.ic{border:0;background:#ffeef5;color:#e8467f;border-radius:999px;width:36px;height:36px;font-size:15px;cursor:pointer}
 label.ck{display:flex;align-items:center;gap:10px}
+
+.hello{font-family:Caveat,cursive;font-size:44px;font-weight:700;margin:18px 0 -22px;animation:fi 1.4s ease-out both}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ticker{overflow:hidden;white-space:nowrap;border-radius:14px;padding:10px 0;font-size:14px;margin-top:16px;background:rgba(255,255,255,.18)}
+.pastel .ticker{background:#fff;color:#8a2a52;box-shadow:0 4px 14px rgba(120,30,70,.08);position:sticky;bottom:10px}
+.ticker span{display:inline-block;padding-left:100%;animation:mq var(--d,240s) linear infinite}
+.ticker em{font-style:normal;opacity:.75;margin-right:40px}
+@keyframes mq{to{transform:translateX(-100%)}}
 </style></head><body><div id="app">
 
 <section id="s-intro" class="screen blue intro on">
+  <div class="hello">Hello Safy 💗</div>
   <h1 class="big">JUZ AMMA<br>CHALLENGE</h1>
   <p>Can you complete the verse?</p>
   <p id="i-lv">5 levels. 10 points.</p>
@@ -83,6 +92,7 @@ label.ck{display:flex;align-items:center;gap:10px}
   <div class="hand">be honest with yourself</div>
   <div class="stack">
     <div class="small" id="i-sel"></div>
+    <div class="ticker"><span class="tk"></span></div>
     <button class="btn w" id="b-start">▶ Start</button>
     <div style="display:flex;gap:10px"><button class="btn g" style="flex:1" id="b-setup">⚙ Settings</button><button class="btn g" style="flex:1" id="b-study">📖 Study</button></div>
   </div>
@@ -117,6 +127,7 @@ label.ck{display:flex;align-items:center;gap:10px}
 <section id="s-study" class="screen pastel">
   <div class="row"><button class="back" data-go="intro">‹ Home</button><b>Study</b><span></span></div>
   <div class="list" id="studylist"></div>
+  <div class="ticker"><span class="tk"></span></div>
 </section>
 
 <section id="s-surah" class="screen pastel">
@@ -127,7 +138,7 @@ label.ck{display:flex;align-items:center;gap:10px}
 </section>
 </div>
 <script>
-const $=s=>document.querySelector(s),AC=['#1f5bff','#14b86a','#8b3dff','#ff3d7f','#ff8a1f'];
+const $=s=>document.querySelector(s),AC=['#e8467f','#2bb59a','#9b5cff','#ff6b6b','#ff9f43'];
 let D,cfg=Object.assign({lv:5,t:5,sel:null,help:true},JSON.parse(localStorage.getItem('ja-cfg')||'{}'));
 const save=()=>localStorage.setItem('ja-cfg',JSON.stringify(cfg));
 const audio=new Audio();audio.preload='auto';let actx;
@@ -188,6 +199,9 @@ function playOne(n,chain){const run=++G.run;document.querySelectorAll('.sv').for
  play(SU.n,n,()=>{if(run!==G.run)return;if(chain&&n<SU.count)playOne(n+1,true);else document.querySelectorAll('.sv').forEach(x=>x.classList.remove('playing'))})}
 $('#b-playall').onclick=()=>playOne(1,true);
 $('#b-hide').onclick=()=>{const h=$('#s-surah').classList.toggle('hidetxt');document.querySelectorAll('.sv').forEach(x=>x.classList.remove('shown'));$('#b-hide').textContent=h?'👁 Show text':'🙈 Hide text'};
+const HADITH=[["Strange are the ways of a believer, for there is good in every affair of his… if he has an occasion to feel delight, he thanks (Allah), and if he gets into trouble and endures it patiently, there is good for him in it.", "Sahih Muslim 2999"], ["He who does not thank the people is not thankful to Allah.", "Sunan Abi Dawud 4811"], ["The reward of deeds depends upon the intentions, and every person will get the reward according to what he has intended.", "Sahih al-Bukhari 1"], ["Allah is kind and lenient and likes that one should be kind and lenient in all matters.", "Sahih al-Bukhari 6927"], ["Kindness is not to be found in anything but that it adds to its beauty, and it is not withdrawn from anything but it makes it defective.", "Sahih Muslim 2594"], ["The merciful are shown mercy by Ar-Rahman. Be merciful on the earth, and you will be shown mercy from Who is above the heavens.", "Jami` at-Tirmidhi 1924"], ["Whoever is not merciful to others will not be treated mercifully.", "Sahih al-Bukhari 5997"], ["Verily, the patience is at the first stroke of a calamity.", "Sahih al-Bukhari 1283"], ["The Religion is sincerity.", "Sahih Muslim 55a"], ["None of you will have faith till he wishes for his brother what he likes for himself.", "Sahih al-Bukhari 13"], ["Your smiling in the face of your brother is charity.", "Jami` at-Tirmidhi 1956"], ["The strong is not the one who overcomes the people by his strength, but the strong is the one who controls himself while in anger.", "Sahih al-Bukhari 6114"], ["The most beloved deed to Allah is the most regular and constant even if it were little.", "Sahih al-Bukhari 6464"], ["Wealth is not in having many possessions, but rather (true) wealth is feeling sufficiency in the soul.", "Sahih al-Bukhari 6446"], ["Nobody can be given a blessing better and greater than patience.", "Sahih al-Bukhari 1469"]];
+function ticker(){const h=[...HADITH].sort(()=>Math.random()-.5);const t=h.map(([x,r])=>`“${x}” <em>— ${r}</em>`).join(' ✦ ');document.querySelectorAll('.tk').forEach(e=>{e.innerHTML=t;e.style.setProperty('--d',Math.round(t.length/9)+'s')})}
+ticker();
 fetch('data.json').then(r=>r.json()).then(d=>{D=d;refreshIntro();setHelp()});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
