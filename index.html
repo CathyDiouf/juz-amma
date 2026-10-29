@@ -81,6 +81,15 @@ label.ck{display:flex;align-items:center;gap:10px}
 .ticker span{display:inline-block;padding-left:100%;animation:mq var(--d,240s) linear infinite}
 .ticker em{font-style:normal;opacity:.75;margin-right:40px}
 @keyframes mq{to{transform:translateX(-100%)}}
+
+.mq{font-weight:800;font-size:18px;margin:16px 0 10px}
+.ch{display:flex;flex-direction:column;gap:9px}
+.ch button{text-align:left;border:2px solid transparent;background:#fff;border-radius:16px;padding:13px 15px;font:600 15px/1.35 Inter,sans-serif;color:#222;box-shadow:0 4px 14px rgba(120,30,70,.07);cursor:pointer}
+.ch button.ok{border-color:#1fae6b;background:#e9f9f1}.ch button.ko{border-color:#e5484d;background:#fdecec}
+.hl{background:var(--a);color:#fff;border-radius:10px;padding:0 .18em}
+.mtr{display:none;font-style:italic;color:#444;text-align:center;font-size:13.5px}.showtr .mtr{display:block}
+.wbw{display:flex;flex-wrap:wrap;direction:rtl;gap:6px 10px;justify-content:center;margin-top:8px}
+.wbw span{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#8a2a52;max-width:90px;text-align:center}.wbw span b{font-family:"Amiri Quran",serif;font-size:17px;font-weight:400;color:#222;line-height:1.7}
 </style></head><body><div id="app">
 
 <section id="s-intro" class="screen blue intro on">
@@ -94,7 +103,7 @@ label.ck{display:flex;align-items:center;gap:10px}
     <div class="small" id="i-sel"></div>
     <div class="ticker"><span class="tk"></span></div>
     <button class="btn w" id="b-start">▶ Start</button>
-    <div style="display:flex;gap:10px"><button class="btn g" style="flex:1" id="b-setup">⚙ Settings</button><button class="btn g" style="flex:1" id="b-study">📖 Study</button></div>
+    <div style="display:flex;gap:10px"><button class="btn g" style="flex:1" id="b-setup">⚙ Settings</button><button class="btn g" style="flex:1" id="b-study">📖 Study</button><button class="btn g" style="flex:1" id="b-mean">🧠 Meaning</button></div>
   </div>
 </section>
 
@@ -115,6 +124,13 @@ label.ck{display:flex;align-items:center;gap:10px}
   <div class="card ans" id="ans"><div class="row"><span class="lbl">▶ SAY THE NEXT VERSE</span><button class="plus" id="p2" style="width:40px;height:34px;font-size:14px">+1</button></div><div id="next"><div class="q">?</div></div></div>
   <div class="timer" id="timer"></div>
   <div class="foot"><button class="tog" id="b-help">Aa Hide help</button><button class="btn d" id="b-next" style="visibility:hidden">Next ›</button></div>
+</section>
+
+<section id="s-meaning" class="screen pastel">
+  <div class="top"><div><div class="ttl">WHAT DOES IT MEAN?</div><div class="dashes" id="mdashes"></div></div><div class="pill" id="mpill">Level 1/5</div></div>
+  <div class="card"><div class="row"><span class="lbl" style="color:var(--a)" id="mlbl">VERSE</span><button class="ic" id="m-play">▶</button></div><div id="mverse"></div></div>
+  <div class="mq" id="mq"></div><div class="ch" id="mch"></div>
+  <div class="foot"><button class="tog" id="b-mtr">Aa Show transliteration</button><button class="btn d" id="m-next" style="visibility:hidden">Next ›</button></div>
 </section>
 
 <section id="s-score" class="screen blue">
@@ -144,7 +160,7 @@ const save=()=>localStorage.setItem('ja-cfg',JSON.stringify(cfg));
 const audio=new Audio();audio.preload='auto';let actx;
 const pad=n=>String(n).padStart(3,'0'),url=(s,v)=>`https://everyayah.com/data/Husary_128kbps/${pad(s)}${pad(v)}.mp3`;
 const ad=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
-const verseHTML=(s,v)=>`<div class="ar verse">${v.ar} <span class="num">${ad(v.n)}</span></div><div class="help"><div class="t">${v.tr}</div><div>${v.en}</div></div>`;
+const verseHTML=(s,v,wb)=>`<div class="ar verse">${v.ar} <span class="num">${ad(v.n)}</span></div><div class="help"><div class="t">${v.tr}</div><div>${v.en}</div>${wb?'<div class="wbw">'+v.w.map(w=>`<span><b>${w[0]}</b>${w[1]}</span>`).join('')+'</div>':''}</div>`;
 function go(id){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));$('#s-'+id).classList.add('on');scrollTo(0,0);if(id!=='game'&&id!=='surah'){stop()}if(id==='intro')refreshIntro()}
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{save();go(b.dataset.go)});
 function stop(){audio.pause();audio.onended=audio.onerror=null;clearInterval(G.tick);G.run++}
@@ -165,7 +181,7 @@ function pick(){const pool=[];sel().forEach(s=>s.v.slice(0,-1).forEach(v=>pool.p
  while(out.length<cfg.lv&&used.size<pool.length){const i=Math.floor(Math.random()*pool.length);if(!used.has(i)){used.add(i);out.push(pool[i])}}return out}
 function start(){actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume&&actx.resume();
  G.q=pick();G.i=0;G.pts=G.q.map(()=>[0,0]);go('game');level()}
-$('#b-start').onclick=start;$('#b-again').onclick=start;
+$('#b-start').onclick=()=>{G.mode='c';start()};$('#b-again').onclick=()=>G.mode==='m'?mstart():start();
 function setHelp(){document.body.classList.toggle('hidehelp',!cfg.help);$('#b-help').textContent=cfg.help?'Aa Hide help':'Aa Show help';$('#b-help2').textContent=cfg.help?'Aa Hide translation':'Aa Show translation';save()}
 $('#b-help').onclick=$('#b-help2').onclick=()=>{cfg.help=!cfg.help;setHelp()};
 function level(){stop();const run=G.run,[s,v]=G.q[G.i],a=AC[G.i%5];document.documentElement.style.setProperty('--a',a);
@@ -184,14 +200,15 @@ function reveal(run){ding();const [s,v]=G.q[G.i],nx=s.v[v.n];$('#timer').innerHT
  $('#b-next').style.visibility='visible';$('#b-next').textContent=G.i===G.q.length-1?'See score ›':'Next ›';
  setTimeout(()=>{if(run!==G.run)return;$('#wave').classList.add('play');play(s.n,nx.n,()=>$('#wave').classList.remove('play'))},900)}
 $('#b-next').onclick=()=>{if(G.i<G.q.length-1){G.i++;level()}else score()};
-function score(){stop();const tot=G.pts.reduce((a,p)=>a+p[0]+p[1],0),max=G.q.length*2,k=max/10,b=x=>Math.round(x*k);
+function score(){stop();showScore(G.pts.reduce((a,p)=>a+p[0]+p[1],0),G.q.length*2)}
+function showScore(tot,max){const k=max/10,b=x=>Math.round(x*k);
  $('#score').innerHTML=`${tot} <small>/${max}</small>`;
  $('#bands').innerHTML=`<div class="band">0 to ${b(3)} • time to revise</div><div class="band">${b(3)+1} to ${b(7)} • solid</div><div class="band">${b(7)+1} to ${max} • MashaAllah</div>`;go('score')}
 // study
 $('#b-study').onclick=()=>{$('#studylist').innerHTML=D.surahs.map(s=>`<div class="item" data-s="${s.n}"><span class="n">${s.n}</span><span class="nm"><b>${s.tr}</b><span>${s.en} · ${s.count} verses</span></span><span class="ar">${s.ar}</span></div>`).join('');go('study')};
 $('#studylist').onclick=e=>{const it=e.target.closest('.item');if(it)openSurah(+it.dataset.s)};
 let SU;function openSurah(n){SU=D.surahs.find(s=>s.n===n);$('#su-t').textContent=`${SU.n}. ${SU.tr}`;$('#su-bas').textContent=D.basmala;
- $('#su-v').innerHTML=SU.v.map(v=>`<div class="sv" data-v="${v.n}"><div class="row"><button class="ic">▶</button><span class="small">${SU.n}:${v.n}</span></div>${verseHTML(SU,v)}</div>`).join('');go('surah');setHelp()}
+ $('#su-v').innerHTML=SU.v.map(v=>`<div class="sv" data-v="${v.n}"><div class="row"><button class="ic">▶</button><span class="small">${SU.n}:${v.n}</span></div>${verseHTML(SU,v,1)}</div>`).join('');go('surah');setHelp()}
 $('#su-v').onclick=e=>{const sv=e.target.closest('.sv');if(!sv)return;const n=+sv.dataset.v;
  if(e.target.closest('.ic')){G.run++;playOne(n,false)}else sv.classList.toggle('shown')};
 function playOne(n,chain){const run=++G.run;document.querySelectorAll('.sv').forEach(x=>x.classList.toggle('playing',+x.dataset.v===n));
@@ -199,6 +216,40 @@ function playOne(n,chain){const run=++G.run;document.querySelectorAll('.sv').for
  play(SU.n,n,()=>{if(run!==G.run)return;if(chain&&n<SU.count)playOne(n+1,true);else document.querySelectorAll('.sv').forEach(x=>x.classList.remove('playing'))})}
 $('#b-playall').onclick=()=>playOne(1,true);
 $('#b-hide').onclick=()=>{const h=$('#s-surah').classList.toggle('hidetxt');document.querySelectorAll('.sv').forEach(x=>x.classList.remove('shown'));$('#b-hide').textContent=h?'👁 Show text':'🙈 Hide text'};
+
+// meaning mode
+const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const norm=t=>t.toLowerCase().replace(/[()]/g,'').replace(/\s+/g,' ').trim();
+const STOP=new Set(['and','the','of','in','to','a','is','it','not','no','then','that','what','which','who','he','they','we','you','indeed','so','for','on','with','from','by','or','but','when','if','will','has','have','was','are','be','surely','did','do','not?','nay','yes','except','at','upon','as','this']);
+const plain=a=>a.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g,'');
+function mq(){const ss=sel(),s=ss[Math.floor(Math.random()*ss.length)],v=s.v[Math.floor(Math.random()*s.v.length)];
+ const good=v.w.map((w,i)=>i).filter(i=>plain(v.w[i][0]).length>=3&&!STOP.has(norm(v.w[i][1])));
+ if(Math.random()<.5&&good.length){const i=good[Math.floor(Math.random()*good.length)],ans=v.w[i][1],seen=new Set([norm(ans)]),pool=[];
+  const add=arr=>sh(arr).forEach(g=>{const n=norm(g);if(pool.length<3&&!seen.has(n)&&!STOP.has(n)){seen.add(n);pool.push(g)}});
+  add(s.v.flatMap(x=>x.w.map(w=>w[1])));if(pool.length<3)add(D.surahs.flatMap(x=>x.v.flatMap(y=>y.w.map(w=>w[1]))));
+  return{t:'w',s,v,i,ans,opts:sh([ans,...pool])}}
+ const L=v.en.length,others=a=>a.filter(x=>x!==v&&x.en!==v.en).sort((a,b)=>Math.abs(a.en.length-L)-Math.abs(b.en.length-L));
+ let pool=others(s.v).slice(0,6);sh(pool);pool=pool.slice(0,3);
+ if(pool.length<3)pool=pool.concat(sh(others(D.surahs.flatMap(x=>x.v)).slice(0,30)).slice(0,3-pool.length));
+ return{t:'v',s,v,ans:v.en,opts:sh([v.en,...pool.map(x=>x.en)])}}
+const M={};
+function mstart(){G.mode='m';M.q=Array.from({length:cfg.lv},mq);M.i=0;M.ok=0;go('meaning');mlevel()}
+$('#b-mean').onclick=mstart;
+$('#b-mtr').onclick=()=>{const on=$('#s-meaning').classList.toggle('showtr');$('#b-mtr').textContent=on?'Aa Hide transliteration':'Aa Show transliteration'};
+function mlevel(){stop();const q=M.q[M.i],a=AC[M.i%5];document.documentElement.style.setProperty('--a',a);
+ $('#mdashes').innerHTML=M.q.map((_,k)=>`<i style="${k<=M.i?'background:'+(k===M.i?a:'#d8b9c7'):''}"></i>`).join('');
+ $('#mpill').textContent=`Level ${M.i+1}/${M.q.length}`;$('#mlbl').textContent=q.t==='w'?'WORD':'VERSE';
+ const ar=q.t==='w'?q.v.w.map((w,k)=>k===q.i?`<span class="hl">${w[0]}</span>`:w[0]).join(' '):q.v.ar;
+ const tr=q.t==='w'?q.v.w.map((w,k)=>k===q.i?`<b>${w[2]}</b>`:w[2]).join(' '):q.v.tr;
+ $('#mverse').innerHTML=`<div class="ar verse">${ar} <span class="num">${ad(q.v.n)}</span></div><div class="mtr">${tr}</div><div class="small" style="text-align:center;color:#888">${q.s.tr} • ${q.s.n}:${q.v.n}</div>`;
+ $('#mq').textContent=q.t==='w'?'What does the highlighted word mean?':'What does this verse mean?';
+ $('#mch').innerHTML=q.opts.map((o,k)=>`<button data-k="${k}">${o}</button>`).join('');$('#m-next').style.visibility='hidden';
+ $('#mch').onclick=e=>{const b=e.target.closest('button');if(!b||M.done)return;M.done=1;const right=q.opts[+b.dataset.k]===q.ans;if(right)M.ok++;
+  b.classList.add(right?'ok':'ko');if(!right)[...$('#mch').children].forEach(x=>{if(q.opts[+x.dataset.k]===q.ans)x.classList.add('ok')});
+  $('#m-next').style.visibility='visible';$('#m-next').textContent=M.i===M.q.length-1?'See score ›':'Next ›'};M.done=0;
+ play(q.s.n,q.v.n)}
+$('#m-play').onclick=()=>{const q=M.q[M.i];play(q.s.n,q.v.n)};
+$('#m-next').onclick=()=>{if(M.i<M.q.length-1){M.i++;mlevel()}else{stop();showScore(M.ok,M.q.length)}};
 const HADITH=[["Strange are the ways of a believer, for there is good in every affair of his… if he has an occasion to feel delight, he thanks (Allah), and if he gets into trouble and endures it patiently, there is good for him in it.", "Sahih Muslim 2999"], ["He who does not thank the people is not thankful to Allah.", "Sunan Abi Dawud 4811"], ["The reward of deeds depends upon the intentions, and every person will get the reward according to what he has intended.", "Sahih al-Bukhari 1"], ["Allah is kind and lenient and likes that one should be kind and lenient in all matters.", "Sahih al-Bukhari 6927"], ["Kindness is not to be found in anything but that it adds to its beauty, and it is not withdrawn from anything but it makes it defective.", "Sahih Muslim 2594"], ["The merciful are shown mercy by Ar-Rahman. Be merciful on the earth, and you will be shown mercy from Who is above the heavens.", "Jami` at-Tirmidhi 1924"], ["Whoever is not merciful to others will not be treated mercifully.", "Sahih al-Bukhari 5997"], ["Verily, the patience is at the first stroke of a calamity.", "Sahih al-Bukhari 1283"], ["The Religion is sincerity.", "Sahih Muslim 55a"], ["None of you will have faith till he wishes for his brother what he likes for himself.", "Sahih al-Bukhari 13"], ["Your smiling in the face of your brother is charity.", "Jami` at-Tirmidhi 1956"], ["The strong is not the one who overcomes the people by his strength, but the strong is the one who controls himself while in anger.", "Sahih al-Bukhari 6114"], ["The most beloved deed to Allah is the most regular and constant even if it were little.", "Sahih al-Bukhari 6464"], ["Wealth is not in having many possessions, but rather (true) wealth is feeling sufficiency in the soul.", "Sahih al-Bukhari 6446"], ["Nobody can be given a blessing better and greater than patience.", "Sahih al-Bukhari 1469"]];
 function ticker(){const h=[...HADITH].sort(()=>Math.random()-.5);const t=h.map(([x,r])=>`“${x}” <em>— ${r}</em>`).join(' ✦ ');document.querySelectorAll('.tk').forEach(e=>{e.innerHTML=t;e.style.setProperty('--d',Math.round(t.length/9)+'s')})}
 ticker();
