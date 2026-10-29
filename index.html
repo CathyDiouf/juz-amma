@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Juz Amma Challenge</title>
+<meta name="theme-color" content="#1f5bff"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Juz Amma">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Caveat:wght@600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Inter,system-ui,sans-serif;color:#111;background:#dfe6f3}
+#app{max-width:430px;margin:0 auto;min-height:100%;position:relative;overflow:hidden}
+.screen{display:none;min-height:100vh;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 22px) 20px calc(env(safe-area-inset-bottom) + 24px);flex-direction:column}
+.screen.on{display:flex}
+.blue{background:radial-gradient(120% 80% at 20% 0%,#4f8bff 0%,#1f5bff 45%,#0a2fc9 100%);color:#fff}
+.pastel{background:radial-gradient(60% 40% at 15% 10%,#dbe8ff 0%,transparent 70%),radial-gradient(50% 35% at 90% 30%,#ffe1ec 0%,transparent 70%),radial-gradient(60% 40% at 30% 95%,#ffe6d2 0%,transparent 70%),#fbfcff}
+.hand{font-family:Caveat,cursive}
+.ar{font-family:"Amiri Quran",Amiri,serif;direction:rtl;line-height:2.1}
+h1.big{font-weight:900;font-size:46px;line-height:.95;letter-spacing:-1px;margin:40px 0 14px}
+.intro p{font-size:20px;font-weight:600;margin:6px 0}
+.intro .rule{font-size:22px;font-weight:800;margin:8px 0}
+.intro .rule b{display:inline-block;background:#fff;color:#1f5bff;border-radius:8px;padding:0 8px;margin-right:8px}
+.intro .hand{font-size:32px;margin-top:22px;opacity:.95}
+.btn{border:0;border-radius:999px;padding:16px 22px;font:800 18px Inter,sans-serif;cursor:pointer}
+.btn.w{background:#fff;color:#1f5bff;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.btn.g{background:rgba(255,255,255,.16);color:#fff;border:1.5px solid rgba(255,255,255,.5)}
+.btn.d{background:#111;color:#fff}
+.stack{display:flex;flex-direction:column;gap:12px;margin-top:auto}
+.small{font-size:14px;opacity:.85}
+/* game */
+.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.ttl{font-weight:900;font-size:19px;letter-spacing:.3px}
+.dashes{display:flex;gap:6px;margin-top:8px}.dashes i{width:26px;height:5px;border-radius:4px;background:#d9dde6}
+.pill{background:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px;box-shadow:0 4px 14px rgba(30,40,80,.08)}
+.card{background:#fff;border-radius:22px;padding:16px 16px 18px;box-shadow:0 10px 30px rgba(30,40,80,.09)}
+.lbl{font-weight:900;font-size:12px;letter-spacing:1px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.wave{display:flex;gap:3px;align-items:center;height:18px}.wave i{width:3px;height:6px;border-radius:2px;background:var(--a)}
+.wave.play i{animation:w .9s ease-in-out infinite}.wave i:nth-child(2){animation-delay:.15s}.wave i:nth-child(3){animation-delay:.3s}.wave i:nth-child(4){animation-delay:.45s}.wave i:nth-child(5){animation-delay:.6s}
+@keyframes w{50%{height:18px}}
+.verse{font-size:30px;text-align:center;margin:10px 0 4px}
+.num{display:inline-flex;align-items:center;justify-content:center;min-width:1.35em;height:1.35em;border:2px double #b08a3c;border-radius:50%;font-size:.62em;color:#7a5a1c;margin:0 .2em;vertical-align:middle;line-height:1;padding:0 .1em}
+.help{font-size:13.5px;color:#555;text-align:center;line-height:1.45;margin-top:4px}.help .t{font-style:italic;color:#333}
+.hidehelp .help{display:none}
+.mid{display:flex;gap:10px;align-items:center;margin:16px 0}
+.qpill{flex:1;background:#fff;border-radius:999px;padding:13px 18px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(30,40,80,.08)}
+.plus{width:48px;height:48px;border-radius:14px;background:#e7e9ef;color:#8b90a0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;border:0;flex:none}
+.plus.on{background:#1f5bff;color:#fff}.plus.tap{cursor:pointer;outline:2px dashed #1f5bff55;outline-offset:2px}
+.ans{border:2px dashed #c9cdd8;box-shadow:none;background:rgba(255,255,255,.75);min-height:170px}
+.ans.rev{border-style:solid;border-color:var(--a);background:#fff}
+.q{font-size:84px;color:#c4c8d2;font-weight:900;text-align:center;margin:6px 0}
+.timer{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0 4px;min-height:96px}
+.ring{position:relative;width:88px;height:88px}.ring svg{transform:rotate(-90deg)}.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900}
+.timer .hand{font-size:30px;line-height:1}
+.foot{display:flex;gap:10px;margin-top:auto;padding-top:14px}
+.foot .btn{flex:1}
+.tog{background:#fff;border:0;border-radius:999px;padding:8px 12px;font-weight:700;font-size:13px;box-shadow:0 4px 14px rgba(30,40,80,.08)}
+/* score */
+.score{font-size:96px;font-weight:900;margin:10px 0 24px}.score small{font-size:40px;opacity:.8}
+.band{font-size:20px;font-weight:700;margin:8px 0}
+/* setup/study */
+.list{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 14px;box-shadow:0 4px 14px rgba(30,40,80,.06);cursor:pointer}
+.item .n{width:34px;height:34px;border-radius:10px;background:#eef2ff;color:#1f5bff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.item .nm{flex:1;min-width:0}.item .nm b{display:block}.item .nm span{font-size:12.5px;color:#666}
+.item .ar{font-size:22px;line-height:1.4}
+.seg{display:flex;gap:6px}.seg button{flex:1;border:0;border-radius:12px;padding:10px;font-weight:800;background:#fff}.seg button.on{background:#1f5bff;color:#fff}
+.back{background:none;border:0;font-weight:800;font-size:16px;color:#1f5bff;padding:0;cursor:pointer}
+.sv{background:#fff;border-radius:18px;padding:12px 14px;margin-bottom:10px;box-shadow:0 4px 14px rgba(30,40,80,.06)}
+.sv .verse{font-size:26px;margin:4px 0}
+.sv.playing{outline:2px solid #1f5bff}
+.hidetxt .sv:not(.shown) .verse,.hidetxt .sv:not(.shown) .help{filter:blur(9px);user-select:none}
+.ic{border:0;background:#eef2ff;color:#1f5bff;border-radius:999px;width:36px;height:36px;font-size:15px;cursor:pointer}
+label.ck{display:flex;align-items:center;gap:10px}
+</style></head><body><div id="app">
+
+<section id="s-intro" class="screen blue intro on">
+  <h1 class="big">JUZ AMMA<br>CHALLENGE</h1>
+  <p>Can you complete the verse?</p>
+  <p id="i-lv">5 levels. 10 points.</p>
+  <div style="margin-top:14px"><div class="rule"><b>+1</b>find the surah</div><div class="rule"><b>+1</b>say the next verse</div></div>
+  <div class="hand">be honest with yourself</div>
+  <div class="stack">
+    <div class="small" id="i-sel"></div>
+    <button class="btn w" id="b-start">▶ Start</button>
+    <div style="display:flex;gap:10px"><button class="btn g" style="flex:1" id="b-setup">⚙ Settings</button><button class="btn g" style="flex:1" id="b-study">📖 Study</button></div>
+  </div>
+</section>
+
+<section id="s-setup" class="screen pastel">
+  <div class="row"><button class="back" data-go="intro">‹ Back</button><b>Settings</b><span></span></div>
+  <p class="lbl" style="margin-top:18px">LEVELS</p><div class="seg" id="seg-lv"><button data-v="5">5</button><button data-v="10">10</button></div>
+  <p class="lbl" style="margin-top:14px">TIMER</p><div class="seg" id="seg-t"><button data-v="5">5 s</button><button data-v="8">8 s</button><button data-v="10">10 s</button></div>
+  <div class="row" style="margin-top:16px"><p class="lbl">SURAHS</p><span><button class="tog" id="b-all">All</button> <button class="tog" id="b-none">None</button></span></div>
+  <div class="list" id="setlist"></div>
+  <button class="btn d" data-go="intro" style="position:sticky;bottom:16px">Save</button>
+</section>
+
+<section id="s-game" class="screen pastel">
+  <div class="top"><div><div class="ttl">COMPLETE THE VERSE</div><div class="dashes" id="dashes"></div></div><div class="pill" id="lvpill">Level 1/5</div></div>
+  <div class="card"><div class="row"><span class="lbl" style="color:var(--a)">LISTEN</span><span class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i></span></div>
+    <div id="prompt"></div></div>
+  <div class="mid"><div class="qpill" id="qpill">▶ Which surah?</div><button class="plus" id="p1">+1</button></div>
+  <div class="card ans" id="ans"><div class="row"><span class="lbl">▶ SAY THE NEXT VERSE</span><button class="plus" id="p2" style="width:40px;height:34px;font-size:14px">+1</button></div><div id="next"><div class="q">?</div></div></div>
+  <div class="timer" id="timer"></div>
+  <div class="foot"><button class="tog" id="b-help">Aa Hide help</button><button class="btn d" id="b-next" style="visibility:hidden">Next ›</button></div>
+</section>
+
+<section id="s-score" class="screen blue">
+  <h1 class="big" style="margin-top:70px">Your score?</h1>
+  <div class="score" id="score"></div>
+  <div id="bands"></div>
+  <div class="stack"><div class="small">Recitation: Mahmoud Khalil Al-Husary</div><button class="btn w" id="b-again">↻ Play again</button><button class="btn g" data-go="intro">Home</button></div>
+</section>
+
+<section id="s-study" class="screen pastel">
+  <div class="row"><button class="back" data-go="intro">‹ Home</button><b>Study</b><span></span></div>
+  <div class="list" id="studylist"></div>
+</section>
+
+<section id="s-surah" class="screen pastel">
+  <div class="row"><button class="back" data-go="study">‹ Surahs</button><b id="su-t"></b><span></span></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><button class="tog" id="b-playall">▶ Play all</button><button class="tog" id="b-hide">🙈 Hide text</button><button class="tog" id="b-help2">Aa Translation</button></div>
+  <div id="su-bas" class="ar" style="text-align:center;font-size:24px"></div>
+  <div id="su-v"></div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s),AC=['#1f5bff','#14b86a','#8b3dff','#ff3d7f','#ff8a1f'];
+let D,cfg=Object.assign({lv:5,t:5,sel:null,help:true},JSON.parse(localStorage.getItem('ja-cfg')||'{}'));
+const save=()=>localStorage.setItem('ja-cfg',JSON.stringify(cfg));
+const audio=new Audio();audio.preload='auto';let actx;
+const pad=n=>String(n).padStart(3,'0'),url=(s,v)=>`https://everyayah.com/data/Husary_128kbps/${pad(s)}${pad(v)}.mp3`;
+const ad=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const verseHTML=(s,v)=>`<div class="ar verse">${v.ar} <span class="num">${ad(v.n)}</span></div><div class="help"><div class="t">${v.tr}</div><div>${v.en}</div></div>`;
+function go(id){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));$('#s-'+id).classList.add('on');scrollTo(0,0);if(id!=='game'&&id!=='surah'){stop()}if(id==='intro')refreshIntro()}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{save();go(b.dataset.go)});
+function stop(){audio.pause();audio.onended=audio.onerror=null;clearInterval(G.tick);G.run++}
+function play(s,v,cb){audio.onended=audio.onerror=null;audio.src=url(s,v);let done=false;const f=()=>{if(!done){done=true;cb&&cb()}};audio.onended=f;audio.onerror=()=>setTimeout(f,1500);audio.play().catch(()=>setTimeout(f,1500))}
+function ding(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const t=actx.currentTime;[880,1320].forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.35/(i+1),t+.01);g.gain.exponentialRampToValueAtTime(.001,t+1.2);o.connect(g).connect(actx.destination);o.start(t);o.stop(t+1.3)})}catch(e){}}
+const sel=()=>cfg.sel&&cfg.sel.length?D.surahs.filter(s=>cfg.sel.includes(s.n)):D.surahs;
+function refreshIntro(){$('#i-lv').textContent=`${cfg.lv} levels. ${cfg.lv*2} points.`;const n=sel().length;$('#i-sel').textContent=n===37?'All 37 surahs of Juz Amma':`${n} surah${n>1?'s':''} selected`}
+// setup
+function seg(id,key){document.querySelectorAll(id+' button').forEach(b=>{b.classList.toggle('on',+b.dataset.v===cfg[key]);b.onclick=()=>{cfg[key]=+b.dataset.v;seg(id,key)}})}
+function buildSetup(){seg('#seg-lv','lv');seg('#seg-t','t');const on=new Set(sel().map(s=>s.n));
+ $('#setlist').innerHTML=D.surahs.map(s=>`<label class="item ck"><input type="checkbox" value="${s.n}" ${on.has(s.n)?'checked':''}><span class="n">${s.n}</span><span class="nm"><b>${s.tr}</b><span>${s.en} · ${s.count} verses</span></span><span class="ar">${s.ar}</span></label>`).join('');
+ const upd=()=>{cfg.sel=[...document.querySelectorAll('#setlist input:checked')].map(i=>+i.value)};
+ $('#setlist').onchange=upd;$('#b-all').onclick=()=>{document.querySelectorAll('#setlist input').forEach(i=>i.checked=true);upd()};$('#b-none').onclick=()=>{document.querySelectorAll('#setlist input').forEach(i=>i.checked=false);upd()}}
+$('#b-setup').onclick=()=>{buildSetup();go('setup')};
+// game
+const G={run:0};
+function pick(){const pool=[];sel().forEach(s=>s.v.slice(0,-1).forEach(v=>pool.push([s,v])));const out=[],used=new Set();
+ while(out.length<cfg.lv&&used.size<pool.length){const i=Math.floor(Math.random()*pool.length);if(!used.has(i)){used.add(i);out.push(pool[i])}}return out}
+function start(){actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume&&actx.resume();
+ G.q=pick();G.i=0;G.pts=G.q.map(()=>[0,0]);go('game');level()}
+$('#b-start').onclick=start;$('#b-again').onclick=start;
+function setHelp(){document.body.classList.toggle('hidehelp',!cfg.help);$('#b-help').textContent=cfg.help?'Aa Hide help':'Aa Show help';$('#b-help2').textContent=cfg.help?'Aa Hide translation':'Aa Show translation';save()}
+$('#b-help').onclick=$('#b-help2').onclick=()=>{cfg.help=!cfg.help;setHelp()};
+function level(){stop();const run=G.run,[s,v]=G.q[G.i],a=AC[G.i%5];document.documentElement.style.setProperty('--a',a);
+ $('#dashes').innerHTML=G.q.map((_,k)=>`<i style="${k<=G.i?'background:'+(k===G.i?a:'#b9c0cf'):''}"></i>`).join('');
+ $('#lvpill').textContent=`Level ${G.i+1}/${G.q.length}`;$('#prompt').innerHTML=verseHTML(s,v);
+ $('#qpill').textContent='▶ Which surah?';['#p1','#p2'].forEach(p=>{$(p).className='plus';$(p).onclick=null});
+ $('#ans').classList.remove('rev');$('#next').innerHTML='<div class="q">?</div>';$('#timer').innerHTML='';$('#b-next').style.visibility='hidden';
+ $('#wave').classList.add('play');play(s.n,v.n,()=>{if(run!==G.run)return;$('#wave').classList.remove('play');countdown(run)})}
+function countdown(run){const T=cfg.t,C=2*Math.PI*38,a=getComputedStyle(document.documentElement).getPropertyValue('--a');
+ $('#timer').innerHTML=`<div class="ring"><svg width="88" height="88"><circle cx="44" cy="44" r="38" stroke="#eceef3" stroke-width="7" fill="#fff"/><circle id="arc" cx="44" cy="44" r="38" stroke="${a}" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="0" style="transition:stroke-dashoffset .1s linear"/></svg><b id="tn">${T}</b></div><div class="hand">your turn!<br>out loud</div>`;
+ const t0=Date.now();G.tick=setInterval(()=>{if(run!==G.run)return clearInterval(G.tick);const e=(Date.now()-t0)/1000;$('#arc').style.strokeDashoffset=C*Math.min(1,e/T);$('#tn').textContent=Math.max(0,Math.ceil(T-e));if(e>=T){clearInterval(G.tick);reveal(run)}},100)}
+function reveal(run){ding();const [s,v]=G.q[G.i],nx=s.v[v.n];$('#timer').innerHTML='';
+ $('#qpill').textContent=`Surah ${s.tr} • ${s.n}:${v.n}`;$('#p1').classList.add('on');
+ $('#ans').classList.add('rev');$('#next').innerHTML=verseHTML(s,nx);
+ [['#p1',0],['#p2',1]].forEach(([p,k])=>{const el=$(p);el.classList.add('tap');const r=()=>el.classList.toggle('on',!!G.pts[G.i][k]);r();el.onclick=()=>{G.pts[G.i][k]^=1;r()}});
+ $('#b-next').style.visibility='visible';$('#b-next').textContent=G.i===G.q.length-1?'See score ›':'Next ›';
+ setTimeout(()=>{if(run!==G.run)return;$('#wave').classList.add('play');play(s.n,nx.n,()=>$('#wave').classList.remove('play'))},900)}
+$('#b-next').onclick=()=>{if(G.i<G.q.length-1){G.i++;level()}else score()};
+function score(){stop();const tot=G.pts.reduce((a,p)=>a+p[0]+p[1],0),max=G.q.length*2,k=max/10,b=x=>Math.round(x*k);
+ $('#score').innerHTML=`${tot} <small>/${max}</small>`;
+ $('#bands').innerHTML=`<div class="band">0 to ${b(3)} • time to revise</div><div class="band">${b(3)+1} to ${b(7)} • solid</div><div class="band">${b(7)+1} to ${max} • MashaAllah</div>`;go('score')}
+// study
+$('#b-study').onclick=()=>{$('#studylist').innerHTML=D.surahs.map(s=>`<div class="item" data-s="${s.n}"><span class="n">${s.n}</span><span class="nm"><b>${s.tr}</b><span>${s.en} · ${s.count} verses</span></span><span class="ar">${s.ar}</span></div>`).join('');go('study')};
+$('#studylist').onclick=e=>{const it=e.target.closest('.item');if(it)openSurah(+it.dataset.s)};
+let SU;function openSurah(n){SU=D.surahs.find(s=>s.n===n);$('#su-t').textContent=`${SU.n}. ${SU.tr}`;$('#su-bas').textContent=D.basmala;
+ $('#su-v').innerHTML=SU.v.map(v=>`<div class="sv" data-v="${v.n}"><div class="row"><button class="ic">▶</button><span class="small">${SU.n}:${v.n}</span></div>${verseHTML(SU,v)}</div>`).join('');go('surah');setHelp()}
+$('#su-v').onclick=e=>{const sv=e.target.closest('.sv');if(!sv)return;const n=+sv.dataset.v;
+ if(e.target.closest('.ic')){G.run++;playOne(n,false)}else sv.classList.toggle('shown')};
+function playOne(n,chain){const run=++G.run;document.querySelectorAll('.sv').forEach(x=>x.classList.toggle('playing',+x.dataset.v===n));
+ const el=document.querySelector(`.sv[data-v="${n}"]`);el&&el.scrollIntoView({behavior:'smooth',block:'center'});
+ play(SU.n,n,()=>{if(run!==G.run)return;if(chain&&n<SU.count)playOne(n+1,true);else document.querySelectorAll('.sv').forEach(x=>x.classList.remove('playing'))})}
+$('#b-playall').onclick=()=>playOne(1,true);
+$('#b-hide').onclick=()=>{const h=$('#s-surah').classList.toggle('hidetxt');document.querySelectorAll('.sv').forEach(x=>x.classList.remove('shown'));$('#b-hide').textContent=h?'👁 Show text':'🙈 Hide text'};
+fetch('data.json').then(r=>r.json()).then(d=>{D=d;refreshIntro();setHelp()});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
